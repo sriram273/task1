@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+	<title>Website</title>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+
+<body>
+<div id="layout">
+
+	
+	<div class= "SP">00:00:00</div>
+	<div class="scores">
+
+		<div class="scrbrd">Score Board </div>
+		<div class="sc"></div>
+		<div class="sc"></div>
+		<div class="sc"></div>
+		<div class="sc"></div>
+		<div class="sc"></div>
+	</div>
+		
+	<div class="ss">
+	<div class="sr"><button id="str" onclick="reset()">Reset</button></div>
+ </div>
+	
+
+	<div class="box">
+		<div id="wrapper">
+
+			<div><button class="btn" onclick="x(1);">1</button></div>
+			<div><button class="btn" onclick="x(2);">2</button></div>
+			<div><button class="btn" onclick="x(3);">3</button></div>
+			<div><button class="btn" onclick="x(4);">4</button></div>
+			<div><button class="btn" onclick="x(5);">5</button></div>
+			<div><button class="btn" onclick="x(6);">6</button></div>
+			<div><button class="btn" onclick="x(7);">7</button></div>
+			<div><button class="btn" onclick="x(8);">8</button></div>
+			<div><button class="btn" onclick="x(9);">9</button></div>
+			<div><button class="btn" onclick="x(10);">10</button></div>
+			<div><button class="btn" onclick="x(11);">11</button></div>
+			<div><button class="btn" onclick="x(12);">12</button></div>
+			<div><button class="btn" onclick="x(13);">13</button></div>
+			<div><button class="btn" onclick="x(14);">14</button></div>
+			<div><button class="btn" onclick="x(15);">15</button></div>
+			<div><button class="btn" onclick="x(16);">16</button></div>
+						
+
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+// Initial values
+        	var ms=0, s=0, m=0;
+        	var timer; //stopwatch
+        	var SP = document.querySelector('.SP') ;
+    
+
+        	//for the grid of buttons
+        	let bt = document.querySelectorAll('.btn') ;
+        	var a = [];
+        	var stg = 0;
+        	var max = 20;
+        	var mg = 16;
+
+        	//scores
+        	var scoreboard = [];
+        	var sc = document.querySelectorAll('.sc');
+
+
+
+//--------------------------
+function shuffle(arra1) {
+    var ctr = arra1.length, temp, index;
+
+// While there are elements in the array
+    while (ctr > 0) {
+// Pick a random index
+        index = Math.floor(Math.random() * ctr);
+// Decrease ctr by 1
+        ctr--;
+// And swap the last element with it
+        temp = arra1[ctr];
+        arra1[ctr] = arra1[index];
+        arra1[index] = temp;
+    }
+    return arra1;
+}
+//-------------------
+//values
+
+for(var i=0;i<16;i++)
+{
+	a[i]=i+1;
+}
+shuffle(a);
+for(var i=0;i<16;i++)
+{
+	bt[i].textContent  = a[i];
+}
+		
+//-----------------------------
+        	function start() {
+        		if(!timer){
+        		timer = setInterval(run , 100);
+        		}
+        	}
+
+        	function pause() {
+        		clearInterval(timer);
+        		timer = false;
+
+        	}
+        	function stop()
+        	{
+				clearInterval(timer);
+        		timer = false;
+
+
+        		ms = s = m =0;
+        		SP.textContent = m + ":" + s + "." + ms;
+
+        	}
+//-----------------------------------------
+function run()
+{
+    SP.textContent = s + "." + ms%10;
+    ms++;
+    if(ms%10 == 0){s++;}
+    
+
+
+}
+
+//--------------------------------------------------
+
+function reset()
+{
+	stg = 0;
+	mg= 16;
+	clearInterval(timer);
+	timer = false;
+	ms = s = m =0;
+	SP.textContent = "00"+ ":" + "00" + ":" + "00";
+
+
+for(var i=0;i<16;i++)
+{
+	a[i]=i+1;
+}
+shuffle(a);
+
+for(var i=0;i<16;i++)
+{
+	bt[i].textContent  = a[i];
+}
+
+
+
+
+}
+
+//====================================================
+function x(n)
+
+{
+
+
+/*tboard.push(l);
+l++;
+scd[1].textContent = tboard[l-1];
+
+*/
+
+
+if(bt[n-1].textContent == stg+1 ){
+var audio = new Audio('http://soundbible.com/mp3/Button_Push-Mike_Koenig-1659525069.mp3');
+audio.play();
+//	http://soundbible.com/mp3/Button_Push-Mike_Koenig-1659525069.mp3
+    if(stg == 0 ){start();}
+    
+    if(mg < max)
+    {
+    	bt[n-1].textContent = ++mg;
+    	stg++;
+    }
+    else
+    {
+    	bt[n-1].textContent = ' ';
+    	stg++;
+    }
+    if(stg == max)
+    {
+		pause();
+		scoreboard.push(ms);
+		scoreboard.sort();
+		localStorage.setItem("scoreboard" , JSON.stringify(scoreboard));
+		var jscore = JSON.parse(localStorage.getItem("scoreboard"));
+		var m;
+		for(var i=0;i<5;i++)
+		{
+			//m = ~~(jscore[i]/10);
+			if(jscore[i])
+				sc[i].textContent = ~~(jscore[i]/10) +"."+ jscore[i] %10 ;
+		}
+
+        			
+    }
+
+}
+
+
+else 
+{
+//	clearInterval();
+}
+
+
+}
+localStorage.setItem("scoreboard" , JSON.stringify(scoreboard));
+var jscore = JSON.parse(localStorage.getItem("scoreboard"));
+
+
+/*
+
+scoreboard.push("hi");        	
+
+
+localStorage.setItem("scoreboard" , JSON.stringify(scoreboard));
+var jscore = JSON.parse(localStorage.getItem("scoreboard"));
+*/
+
+
+
+
+</script>
+</body>
+</html>
